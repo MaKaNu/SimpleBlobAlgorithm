@@ -173,7 +173,7 @@ classdef SimpleBlob < vision.labeler.AutomationAlgorithm & vision.labeler.mixin.
             else
                 % Find New BBoxes
                 autoLabels = createNewBBoxes(algObj, I_hsv);
-                algObj.BBoxPoints = reshape([autoLabels.Position], algObj.numBBoxes, 4)';
+                algObj.BBoxPoints = struct2table(autoLabels).Position;
             end
             
             disp(['Executing run on image frame at ' char(seconds(algObj.CurrentTime))])
@@ -231,24 +231,22 @@ classdef SimpleBlob < vision.labeler.AutomationAlgorithm & vision.labeler.mixin.
             labeledImage = logical(BW2);  
             
             blobMeasurements = regionprops(labeledImage, BW2, 'all');
-            for k = 1 : length(algObj.BBoxPoints)
-          %      if blobMeasurements(k).Area > algObj.areaThreshold
-                    BBox = algObj.BBoxPoints(k,:);
+            for k = 1 : height(algObj.BBoxPoints)
+                
+                    oldBBox = algObj.BBoxPoints(k,:);
                     
                     % Calculate Difference between old BBoxes and new one
-                    oldBBoxes = struct2table(blobMeasurements).BoundingBox;
-                    Delta = abs(oldBBoxes - BBox);
+                    foundBBoxes = struct2table(blobMeasurements, 'AsArray', true).BoundingBox;
+                    Delta = abs(foundBBoxes - oldBBox);
                    
                     % Find minimal difference
                     sumOfBBoxes = sum(Delta,2);
                     idx = sumOfBBoxes==min(sumOfBBoxes);
                     
-                    newBBox = oldBBoxes(idx,:);
+                    newBBox = foundBBoxes(idx,:);
                     
                     newLabel = findNewBBox(algObj, k, newBBox);
                     autoLabels = [autoLabels newLabel]; %#ok<AGROW>
-                    
-                %end
             end
         end
         
