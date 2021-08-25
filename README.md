@@ -19,10 +19,11 @@ Copy the complete folder ```+vision/+labeler/``` on a directory on the matlab pa
   - all object are good visual
   - the background has low saturation
   - the object count doesn't change in the sequence
-- Create ROIs for all objects and select them with ```ctrl + click```
+- Create ROIs for all objects you want to be automated and select them with ```ctrl + click```
 - Refresh the Algorithm list and choose "Simple Blob Algorithm"
 - Start the Algorithm with the "Play" button.
-- If the Algorithm fails: try again with different values for Area Threshold and Dilation Size in the Settings
+- If the Algorithm fails: try again with different Dilation Size in the Settings
+- If you have changing Objects in the scene, automate the frames in segments.
 
 And remember: This is a bare simple algorithm and is far from stable 😏
 

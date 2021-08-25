@@ -35,9 +35,6 @@ classdef SimpleBlob < vision.labeler.AutomationAlgorithm & vision.labeler.mixin.
     % Settings Properties
     %----------------------------------------------------------------------
     properties
-       
-        % Area Threshold
-        areaThreshold = 1000
         
         %Dilation Size
         dilationSize = 20
@@ -96,14 +93,7 @@ classdef SimpleBlob < vision.labeler.AutomationAlgorithm & vision.labeler.mixin.
         %    >> doc vision.labeler.AutomationAlgorithm.settingsDialog
         %
         function settingsDialog(algObj)
-            
-            disp('Executing settingsDialog')
-            prompt = {'set value for area threshold from 100 - 10000'};
-            dlgTitle = 'Area Threshold';
-            dims = [1 50];
-            defInput = {num2str(algObj.areaThreshold)};
-            algObj.areaThreshold = str2double(inputdlg(prompt,dlgTitle, dims, defInput));
-            
+                      
             prompt = {'set value for dilation size from 2 - 50'};
             dlgTitle = 'Dilation Size';
             dims = [1 50];
