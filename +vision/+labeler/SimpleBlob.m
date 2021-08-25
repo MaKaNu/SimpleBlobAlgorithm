@@ -231,21 +231,24 @@ classdef SimpleBlob < vision.labeler.AutomationAlgorithm & vision.labeler.mixin.
             labeledImage = logical(BW2);  
             
             blobMeasurements = regionprops(labeledImage, BW2, 'all');
-            for k = 1 : length(blobMeasurements)
-                if blobMeasurements(k).Area > algObj.areaThreshold
-                    BBox = blobMeasurements(k).BoundingBox;
+            for k = 1 : length(algObj.BBoxPoints)
+          %      if blobMeasurements(k).Area > algObj.areaThreshold
+                    BBox = algObj.BBoxPoints(k,:);
                     
                     % Calculate Difference between old BBoxes and new one
-                    Delta = abs(algObj.BBoxPoints - BBox);
-                    
+                    oldBBoxes = struct2table(blobMeasurements).BoundingBox;
+                    Delta = abs(oldBBoxes - BBox);
+                   
                     % Find minimal difference
                     sumOfBBoxes = sum(Delta,2);
-                    idx = find(sumOfBBoxes==min(sumOfBBoxes));
+                    idx = sumOfBBoxes==min(sumOfBBoxes);
                     
-                    newLabel = findNewBBox(algObj, idx, BBox);
+                    newBBox = oldBBoxes(idx,:);
+                    
+                    newLabel = findNewBBox(algObj, k, newBBox);
                     autoLabels = [autoLabels newLabel]; %#ok<AGROW>
                     
-                end
+                %end
             end
         end
         
